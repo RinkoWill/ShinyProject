@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Real Estate Deal Analyzer</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Real Estate Deal Analyzer">
+  <meta name="author" content="Rinko Will">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Real Estate Deal Analyzer</h1>
+    <h2>Interactive Shiny App</h2>
+    <p>Rinko Will<br/>Coursera Data Products Project</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Purpose of Deal Analyzer App</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>This app is designed to be used by investors, realtors, companies, or individuals LIKE YOU interested
+in purchasing distressed property, repairing and renovating the property, then reselling the 
+updated property for a PROFIT.</p>
+
+<p>It can be difficult to know what you should bid on any given property in order to make a profit since so many variables are involved and sometimes you just have to make guesses as to what your bid should be and hope for the best!</p>
+
+<p>This app can help guide the decision making process by providing a dynamic interface that automatically calculates an appropriate range of bids based on your best estimates of all the input variables. Because the output is dynamic, you can easily see how changing the various inputs affects the amount you should bid!</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Inputting Data</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>To use the app, all you have to do is enter values for a few variables, using simple slider bars. Normally, it would be difficult to keep all of these variables in your mind at once when trying to think of an appropriate bid. This app does it all for you!</p>
+
+<ol>
+<li><p>&quot;Estimated Repair Costs&quot;
+This value is entered as a range of dollar amounts. This is your best guess at how much it will cost to renovate and/or repair the property prior to reselling it.</p></li>
+<li><p>&quot;Monthly Loan and Tax Cost&quot;
+This value is the cost of the loan and taxes that must be paid on the property each month during the renovation period.</p></li>
+<li><p>&quot;Months Needed for Repair&quot;
+This value is the number of months it will take to renovate the property</p></li>
+<li><p>&quot;House Value After Repairs&quot;
+This value is the estimated value of the property after all repairs and renovations are complete.</p></li>
+<li><p>&quot;Return on Cash Desired&quot;
+This value is the desired percent return on the your cash investment</p></li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Model Output: What You Should Bid</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The app automatically outputs the minimum and maximum bid you would need to make on the property to receive the desired return on investment based on the input variables you chose. There are two bid values (min and max) because the Estimated Repair Costs are given as a range of values. As an example, if your input values are:  </p>
+
+<ul>
+<li>Estimated Repair Costs = $15,000-$30,000<br></li>
+<li>Monthly Loan and Tax Cost = $1000 | Months Needed for Repair&quot; = 3<br></li>
+<li>House Value After Repairs&quot; = $100,000 | Return on Cash Desired&quot; = 9%<br></li>
+</ul>
+
+<pre><code class="r">library(&quot;scales&quot;)
+repaircostlow&lt;-15000;repaircosthigh&lt;-30000;monthcost&lt;-1000;months&lt;-3;sellprice&lt;-100000;return&lt;-9
+bidlow&lt;-(repaircostlow+(monthcost*months)-sellprice)/(-1*(1+(return*.01)));bidlow &lt;- dollar(round(bidlow,digits=0))
+bidhigh&lt;-(repaircosthigh+(monthcost*months)-sellprice)/(-1*(1+(return*.01)));bidhigh &lt;- dollar(round(bidhigh,digits=0))
+</code></pre>
+
+<p>The model will tell you that your minimum bid should be $75,229 and your maximum bid should be $61,468</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Dynamic Visual Output</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The app also outputs a plot so you can visualize the maximum bid, the minimum bid, the median bid, and the percentage return on investment that you selected. This plot is reactive, so you can play around with different input values to see how they change the bid ranges. With smarter, more accurate bids, you can increase your sales volumes and ultimately your profits!</p>
+
+<p><img src="assets/fig/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Purpose of Deal Analyzer App'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Inputting Data'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Model Output: What You Should Bid'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Dynamic Visual Output'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='NA'>
+         5
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
