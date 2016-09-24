@@ -1,7 +1,4 @@
-# Shiny Project
-Shiny App for Coursera Data Products Course
-
-# Repo Contents
+# Shiny Project Repo Contents
 
 ##Shiny App files
 
