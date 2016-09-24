@@ -1,0 +1,88 @@
+---
+title: "ShinyApp Documentation"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Purpose of Documentation
+
+This documentation was created to accompany the Real Estate Deal Analyzer, a Shiny App created for the Coursera Data Products Course.  
+This document should provide all the information needed for anyone to use and understand the app.
+
+## Purpose of Deal Analyzer App
+
+This app is designed to be used by investors, realtors, companies, or individuals interested
+in purchasing distressed property, repairing and renovating the property, then reselling the 
+updated property for a profit.
+
+Note this is a simplified version of the full app and has been developed for illustrative purposes for the Coursera Data Products Project.
+
+## Inputting Data
+
+To use the app, the user must input several values:
+
+1. "Estimated Repair Costs"
+    This value is entered as a range of dollar amounts. This is the user's best guess at how much it will cost to renovate and/or repair the property prior to reselling it.
+        
+2. "Monthly Loan and Tax Cost"
+    This value is the cost of the loan and taxes that must be paid on the property each month during the renovation period.
+    
+3. "Months Needed for Repair"
+    This value is the number of months it will take to renovate the property
+    
+4. "House Value After Repairs"
+    This value is the estimated value of the property after all repairs and renovations are complete.
+    
+5. "Return on Cash Desired"
+    This value is the desired percent return on the initial cash investment made by the 
+
+## Model Output
+
+The model outputs the minimum and maximum bid you would need to make on the property to receive the desired return on investment, assuming that all the input values are accurate. There are two bid values because the Estimated Repair Costs are given as a range of values. So if the input values are:  
+  
+* Estimated Repair Costs = $15,000-$30,000  
+* Monthly Loan and Tax Cost = $1000
+* Months Needed for Repair" = 3  
+* House Value After Repairs" = $100,000
+* Return on Cash Desired" = 9%  
+
+```{r}
+library("scales")
+repaircostlow<-15000;repaircosthigh<-30000;monthcost<-1000;months<-3;sellprice<-100000;return<-9
+bidlow<-(repaircostlow+(monthcost*months)-sellprice)/(-1*(1+(return*.01)));bidlow <- dollar(round(bidlow,digits=0))
+bidhigh<-(repaircosthigh+(monthcost*months)-sellprice)/(-1*(1+(return*.01)));bidhigh <- dollar(round(bidhigh,digits=0))
+```
+In this case, the minimum bid will be `r bidlow` and the maximum bid will be `r bidhigh`
+
+
+## Dynamic Visual Output
+
+The app also outputs a plot so you can visualize the maximum bid, the minimum bid, the median bid, and the percentage return on investment that the user selected. This plot is reactive, so the user can play with different input values to see how these input change the bid ranges.
+
+Using the sample inputs from above, this plot would like like this:
+
+```{r fig.height=4, fig.width=8, echo=FALSE}
+        library("ggplot2")
+        repaircostlow<-15000;repaircosthigh<-30000;monthcost<-1000;months<-3;sellprice<-100000;return<-9
+        bidlow<-(repaircostlow+(monthcost*months)-sellprice)/(-1*(1+(return*.01)))
+        bidhigh<-(repaircosthigh+(monthcost*months)-sellprice)/(-1*(1+(return*.01)))               
+        Median_Bid <- (bidlow+bidhigh)/2
+        data <- data.frame("Return" = rep(return,3),"Bid" = c(bidlow,Median_Bid,bidhigh))
+
+        g <- ggplot(data,aes(Return,Bid)) + 
+        ylim(0,sellprice) + 
+        scale_x_continuous(limits=c(0,100),breaks=seq(0,100,10)) +
+        geom_hline(aes(yintercept=Median_Bid,color="Median Bid"),size=2,linetype="solid") + 
+        geom_hline(aes(yintercept=bidlow,color="Minimum Bid"),size=1,linetype="dotted",show.legend=TRUE) + 
+        geom_hline(aes(yintercept=bidhigh,color="Maximum Bid"),size=1,linetype="dotted",show.legend=TRUE) + 
+        geom_vline(aes(xintercept=return,color="Return %"),size=1,linetype="dotdash") +
+        theme(legend.position = "right") +
+        scale_color_manual(values=c("Median Bid" = "black","Minimum Bid" = "blue","Maximum Bid" = "green","Return %" = "red")) +
+        labs(title="Bid Range",x="Return (%)",y="Bid Amount ($)",colour="Bid and Return Guides")
+        g
+```
+
+
